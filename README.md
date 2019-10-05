@@ -1,5 +1,5 @@
 # google-business-finder
-Hacked together Python 2.7 CLI script to help a door-to-door salesperson generate a list of businesses to visit.
+Hacked together Python 2.7 CLI script made eons ago to help a door-to-door salesperson generate a list of businesses to visit.
 
 It takes in a radius and generates a .csv file containing the business's name, address and rating.
 
