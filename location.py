@@ -11,10 +11,6 @@ def findNearbyPlaces(enteredLoc, filename, radius):
     url = PLACES_API_URL + "location=" + enteredLoc +"&radius=" + radius + "&key=" + API_KEY
     response = urllib.urlopen(url)
     data = json.loads(response.read())
-    #fread = open('places2.json')
-    #data = json.load(fread)
-    
-    #print data
 
     hasNextPage = True
 
@@ -24,8 +20,8 @@ def findNearbyPlaces(enteredLoc, filename, radius):
             print "Next page exists"
             nextPage = data["next_page_token"]
         else:
-	    print "No more pages"
-	    hasNextPage = False
+            print "No more pages"
+            hasNextPage = False
 
         for result in data["results"]:
             try:
@@ -35,11 +31,11 @@ def findNearbyPlaces(enteredLoc, filename, radius):
                 continue
     
         time.sleep(2)
-	if hasNextPage:        
-		url = PLACES_API_URL + "location=" + enteredLoc +"&radius=5000" + "&key=" + API_KEY + "&pagetoken=" + str(nextPage.encode('utf-8'))
-        	print url
-        	response = urllib.urlopen(url)
-        	data = json.loads(response.read())
+    if hasNextPage:        
+        url = PLACES_API_URL + "location=" + enteredLoc +"&radius=5000" + "&key=" + API_KEY + "&pagetoken=" + str(nextPage.encode('utf-8'))
+        print url
+        response = urllib.urlopen(url)
+        data = json.loads(response.read())
 
     print data["status"]
     fwrite.close()
@@ -49,11 +45,7 @@ def findLatLong(enteredLoc):
     url = GEO_API_URL + "address=" + enteredLoc + "&key=" + API_KEY
     response = urllib.urlopen(url)
     data = json.loads(response.read())
-    #fread = open('loc.json')
-    #data = json.load(fread)
-
-    #print data
-
+    
     latitude = data["results"][0]["geometry"]["location"]["lat"]
     longitude = data["results"][0]["geometry"]["location"]["lng"]
 
@@ -77,7 +69,7 @@ def main():
         enteredLoc = raw_input()
         print "You entered " + enteredLoc + "!"
         latLong = findLatLong(enteredLoc)
-	filename = enteredLoc
+        filename = enteredLoc
     elif(selection == 2):
         print "Enter Latitude:"
         enteredLat = raw_input()
@@ -85,7 +77,7 @@ def main():
         enteredLong = raw_input()
         latLong = enteredLat +","+enteredLong
         print "You entered " + latLong
-	filename = latLong
+        filename = latLong
     else:
         print "Exiting..."
         sys.exit()
@@ -97,5 +89,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
