@@ -2,13 +2,13 @@ import sys
 import json
 import urllib
 import time
+import argparse
 
-API_KEY = "YOUR_API_KEY"
 GEO_API_URL = "https://maps.googleapis.com/maps/api/geocode/json?"
 PLACES_API_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
 
-def findNearbyPlaces(enteredLoc, filename, radius):
-    url = PLACES_API_URL + "location=" + enteredLoc +"&radius=" + radius + "&key=" + API_KEY
+def findNearbyPlaces(enteredLoc, filename, radius, apiKey):
+    url = PLACES_API_URL + "location=" + enteredLoc +"&radius=" + radius + "&key=" + apiKey
     response = urllib.urlopen(url)
     data = json.loads(response.read())
 
@@ -32,7 +32,7 @@ def findNearbyPlaces(enteredLoc, filename, radius):
     
         time.sleep(2)
     if hasNextPage:        
-        url = PLACES_API_URL + "location=" + enteredLoc +"&radius=5000" + "&key=" + API_KEY + "&pagetoken=" + str(nextPage.encode('utf-8'))
+        url = PLACES_API_URL + "location=" + enteredLoc +"&radius=5000" + "&key=" + apiKey + "&pagetoken=" + str(nextPage.encode('utf-8'))
         print url
         response = urllib.urlopen(url)
         data = json.loads(response.read())
@@ -41,8 +41,8 @@ def findNearbyPlaces(enteredLoc, filename, radius):
     fwrite.close()
 
 
-def findLatLong(enteredLoc):
-    url = GEO_API_URL + "address=" + enteredLoc + "&key=" + API_KEY
+def findLatLong(enteredLoc, apiKey):
+    url = GEO_API_URL + "address=" + enteredLoc + "&key=" + apiKey
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     
@@ -56,6 +56,11 @@ def findLatLong(enteredLoc):
     return latLong
 
 def main():
+    parser = argparse.ArgumentParser(description='Google Business Finder')
+    parser.add_argument("--api-key", required=True, type=str, help="The API key to use")
+
+    args = parser.parse_args()
+
     print "Please make a selection!"
     print "1. Search by Suburb/City/Town name (uses Geo API + Places API)"
     print "2. Input Lat/Long (uses Places API)"
@@ -68,7 +73,7 @@ def main():
         print "Enter a suburb/city/location followed by a state!"
         enteredLoc = raw_input()
         print "You entered " + enteredLoc + "!"
-        latLong = findLatLong(enteredLoc)
+        latLong = findLatLong(enteredLoc, args.api_key)
         filename = enteredLoc
     elif(selection == 2):
         print "Enter Latitude:"
@@ -85,7 +90,7 @@ def main():
     print "Enter a radius (metres)"
     radius = raw_input()
 
-    findNearbyPlaces(latLong, filename, radius)
+    findNearbyPlaces(latLong, filename, radius, args.api_key)
 
 if __name__ == "__main__":
     main()
