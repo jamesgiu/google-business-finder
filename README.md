@@ -20,4 +20,4 @@ Source: https://developers.google.com/places/web-service/search
 ## Execution
 * Install Python 2.7
 * (Linux/Unix-based systems) Run `python2 location.py --api-key=<your_api_key>`
-* (Windows) Launch by executing `windows/run.bat`
+* (Windows) Launch by executing `windows/run.bat <your_api_key>`
